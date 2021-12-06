@@ -1,0 +1,165 @@
+I have added a mp4 file of the game being run
+
+this was created in my own engine
+
+In order to properly run the game you must have space.png in the same directory, and the rest of the images must be in the player folder 
+
+GameMain -- 
+
+GameMain is the main method, it creates and instance of GrameFrame
+
+GameFrame--
+
+GameFrame is essentially a JFrame, it creates and instance of GamePanel the GrameFrame class adds the panel to the frame
+
+GamePanel-
+
+Game panel extends JPanel and implements Runnable
+
+game_width and game_height, cameraX are created as public static atrributes in case another class needs access to the size of the JPanel
+
+a thread called gamethread is created
+an image called image is created
+an empty sprite and rock object are made
+int score is set to 0
+int highscore is made
+
+an arraylist of walls is made, an arraylist of rocks is made
+int offset is made
+int amountOfRocks is made and set to 1;
+
+gamepanel constructor
+	the file that contains the highscore is read, newSprite() method is called , Reset() method is called 
+	thread is created and started
+
+WriteFile() method
+	writes to a file called highscore.txt it stores the highscore
+
+ReadFile() method
+	reads from the highscore.txt file sets highscore variable to the read input
+
+Reset() method
+	sets the sprites location, sets the speed of sprite to 0, clears the walls arraylist and rocks arraylist
+	adds a rock to the rocks arraylist
+	passes the offset to the makeWalls() method 
+	sets score to 0
+makeWalls(int offset)
+	passed offset for creating walls
+	In this method a random number is created, 0-7, based on the number a "level" will be generated, if the level is '1' a metor will be added to the game with a random x and y value from 0-650
+	the score of the player is increased everytime a "level" is generated
+
+playSound()
+	plays .wav sound file
+
+newSprite() method
+	creates the sprite
+
+paint(graphics g)
+	creates the background image and draws it
+
+draw(graphics g)
+	for each wall in the walls arraylist its .draw method is called
+	for each metor in the rocks arraylist its .draw method is called
+	sprites draw method is called
+	Score and high Score are drawn to the panel as strings
+
+update() method
+	calls sprite.update() 
+	for each metor in the rocks arraylist the .move() method is called
+
+public void checkBounds() method
+	checks if the sprite has fallen off the level, if the highscore is less than the score, highscore is changed and written to the file, the Reset() method is calledd
+
+collision() method
+	checks for each metor in the rocks arraylist if they have collided with the player sprite
+
+run() method
+	this is the game loop set to 30 fps
+	each frame the update() method is called, checkBounds() method is called, and removes walls that are offscreen so they do not consume resources
+	if the collision method is true the highscore is changed if score is higher and written to the file and the reset() method is called
+	lastly repaint() is called
+
+public class AL extends KeyAdapter
+	this is an inner class that controls if a key is pressed or released, calls the sprite.keyPressed// sprite.keyReleased respectivly
+
+
+Sprite --
+
+sprite has an x and y attribute set to 0
+width and height is created
+boolean isVisible is created
+int xSpeed, intYspeed is created
+Rectangle hitBox is created
+boolean keyLeft,keyRight,keyUp, keyDown, created
+
+4 bufferedimages are created left1 left2 right1 right2
+string direction is created
+int spriteCounter set to 0
+int spriteNum set to 1
+
+sprite() constructor
+	loadImage method is created
+	hitBox is set to x,y,w,h based on image
+	default direction of sprite is set to "left"
+
+update() method
+	move method is called
+	if the left key is pressed direction is set to left, if key right is pressed direction is set to right
+
+	if a key is pressed spriteCounter is increased by 1 
+		if spriteCounter is > 5 meaning every five frames spriteNum is set to 2 if it currently 1 and 2 if it is currently 1, this is for changing the sprites image to create an animation
+		sprite counter is reset to 0;
+
+move() method
+	here is where the sprite is controlled with the with the keyboard, w is jumping, a is left movement, d is right movement
+	collision of the sprite and the walls is also done in the move method,
+
+draw(graphics g) method
+	if visible, and image is chosen first by the direction, left or right, then either left 1 or left 2 image is loaded based on spriteNum value same for right images
+	image is drawn
+
+keyPressed(KeyEvent e) method and KeyReleased(KeyEvent e)
+	if the 'a' key is pressed keyLeft is set to true when released it is set to false, this is the same for the 'd' key for keyRight, and the 'w' key for keyUp
+
+wall ---
+
+
+
+int x,y, width, height, startX are created
+color object is made
+
+wall(Color color, int x, int y, int width, int height) constructor
+
+values are set
+
+draw(graphics g)
+	draws a single wall
+
+public int set(int cameraX)
+	makes it so the "camera" follows the player and the walls "scroll" across screen
+
+metor-
+	int x,y,w,h are made
+	BufferedImage rock is created;
+
+metor(int x, int y) constructor
+	sets values and calls loadImage()
+
+
+loadImage() method
+	sets rock to the correct image and w = 48 and h=48
+
+draw(graphics g) method
+	draws a metor with image rock
+
+move() method
+	basically a wrap function for the metor
+
+public rectangle getBounds() method
+	returns a bounding box for the metor
+
+
+
+
+
+
